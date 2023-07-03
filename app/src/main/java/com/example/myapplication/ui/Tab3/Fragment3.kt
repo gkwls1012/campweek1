@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.R
 import com.example.myapplication.databinding.Fragment3Binding
 import com.example.myapplication.ui.Tab3.Tab3ViewModel
-
+import kotlin.random.Random
 
 class Fragment3 : Fragment() {
 
@@ -71,7 +71,8 @@ class Fragment3 : Fragment() {
         clickCount++
         tapCountTextView.text = clickCount.toString()
 
-        if (clickCount >= 10) {
+        val random = Random.nextInt(10, 51)
+        if (clickCount >= random) {
             shapeImageView.setImageResource(R.drawable.star_shape)
             restartButton.visibility = View.VISIBLE
             shapeImageView.isEnabled = false
