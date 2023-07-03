@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 class Tab3ViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is Fragment 3"
+        value = "Tab the egg to\nhatch a dinosaur!!"
     }
     val text: LiveData<String> = _text
 }
