@@ -73,9 +73,10 @@ class Fragment3 : Fragment() {
 
         val random = Random.nextInt(10, 51)
         if (clickCount >= random) {
-            shapeImageView.setImageResource(R.drawable.star_shape)
+            shapeImageView.setImageResource(R.drawable.star)
             restartButton.visibility = View.VISIBLE
             shapeImageView.isEnabled = false
+
         }
 
         vibrateDevice()

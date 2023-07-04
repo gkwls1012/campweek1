@@ -12,6 +12,8 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.loader.content.CursorLoader
+import android.widget.TextView
+
 
 
 class Fragment2 : Fragment() {
@@ -20,6 +22,9 @@ class Fragment2 : Fragment() {
     private val binding get() = _binding!!
     private lateinit var gridView: GridView
     private lateinit var imageAdapter: ImageAdapter
+    private var noPhotoTextView: TextView? = null
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,19 +35,31 @@ class Fragment2 : Fragment() {
         val root: View = binding.root
 
         gridView = binding.gridView
-        imageAdapter = ImageAdapter(
-            requireContext(),
-            getImages(requireContext())
-        )
+        val images = getImages(requireContext())
+        imageAdapter = ImageAdapter(requireContext(), images)
 
         gridView.adapter = imageAdapter
+
+        noPhotoTextView = binding.noPhotoTextView
+
+        if (images.isEmpty()) {
+            gridView.visibility = View.GONE
+            noPhotoTextView?.visibility = View.VISIBLE
+        } else {
+            gridView.visibility = View.VISIBLE
+            noPhotoTextView?.visibility = View.GONE
+        }
 
         return root
     }
 
+
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        noPhotoTextView = null
     }
 
 

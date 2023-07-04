@@ -7,6 +7,13 @@
     tools:context=".ui.Tab2.Fragment2">
 
     <TextView
+        android:id="@+id/noPhotoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No photo"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/text_dashboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
