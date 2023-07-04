@@ -1,103 +1,66 @@
 package com.example.myapplication.ui.Tab2
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridView
+import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.example.myapplication.databinding.Fragment2Binding
-import android.content.Context
-import android.database.Cursor
-import android.net.Uri
-import android.provider.MediaStore
-import androidx.loader.content.CursorLoader
-import android.widget.TextView
-
-
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.R
 
 class Fragment2 : Fragment() {
-
-    private var _binding: Fragment2Binding? = null
-    private val binding get() = _binding!!
-    private lateinit var gridView: GridView
+    private lateinit var recyclerView: RecyclerView
     private lateinit var imageAdapter: ImageAdapter
-    private var noPhotoTextView: TextView? = null
-
-
+    private val imageList = mutableListOf<String>()
+    private val SELECT_IMAGES_REQUEST_CODE = 1
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = Fragment2Binding.inflate(inflater, container, false)
-        val root: View = binding.root
+    ): View? {
+        val root = inflater.inflate(R.layout.fragment_2, container, false)
 
-        gridView = binding.gridView
-        val images = getImages(requireContext())
-        imageAdapter = ImageAdapter(requireContext(), images)
+        recyclerView = root.findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        imageAdapter = ImageAdapter(imageList)
+        recyclerView.adapter = imageAdapter
 
-        gridView.adapter = imageAdapter
-
-        noPhotoTextView = binding.noPhotoTextView
-
-        if (images.isEmpty()) {
-            gridView.visibility = View.GONE
-            noPhotoTextView?.visibility = View.VISIBLE
-        } else {
-            gridView.visibility = View.VISIBLE
-            noPhotoTextView?.visibility = View.GONE
-        }
+        val selectImageButton: Button = root.findViewById(R.id.btnAddImages)
+        selectImageButton.setOnClickListener { selectImages() }
 
         return root
     }
 
 
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-        noPhotoTextView = null
+    fun selectImages() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        startActivityForResult(Intent.createChooser(intent, "Select Images"), SELECT_IMAGES_REQUEST_CODE)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-    private val IMAGE_PROJECTION = arrayOf(
-        MediaStore.Images.Media._ID,
-        MediaStore.Images.Media.DATA
-    )
+        if (requestCode == SELECT_IMAGES_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val clipData = data?.clipData
 
-    val MAX_IMAGES = 27
-    val ORDER_BY = "${MediaStore.Images.Media.DATE_ADDED} DESC"
-
-    private fun getImages(context: Context): List<String> {
-        val images = mutableListOf<String>()
-
-        val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val cursorLoader = CursorLoader(context, uri, IMAGE_PROJECTION, null, null, ORDER_BY)
-        val cursor: Cursor? = cursorLoader.loadInBackground()
-
-        cursor?.use {
-            val idColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-            val dataColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-
-            var count = 0
-
-            while (cursor.moveToNext() && count < MAX_IMAGES) {
-                val id = cursor.getLong(idColumnIndex)
-                val data = cursor.getString(dataColumnIndex)
-                val contentUri: Uri = Uri.withAppendedPath(uri, id.toString())
-
-                // Add the image path or content URI to the list
-                images.add(data ?: contentUri.toString())
-
-                count++
+            if (clipData != null) {
+                for (i in 0 until clipData.itemCount) {
+                    val imageUri = clipData.getItemAt(i).uri
+                    imageList.add(imageUri.toString())
+                }
+            } else {
+                val imageUri = data?.data
+                imageList.add(imageUri.toString())
             }
+
+            imageAdapter.notifyDataSetChanged()
         }
-
-        return images
     }
-
 }
-

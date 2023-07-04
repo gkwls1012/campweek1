@@ -1,52 +1,34 @@
 package com.example.myapplication.ui.Tab2
 
-import android.content.Context
+import com.example.myapplication.R
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AbsListView
-import android.widget.BaseAdapter
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.myapplication.R
 
-class ImageAdapter(private val context: Context, private val images: List<String>) :
-    BaseAdapter() {
+class ImageAdapter(private val imageList: List<String>) : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
-    override fun getCount(): Int {
-        return images.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_image, parent, false)
+        return ImageViewHolder(view)
     }
 
-    override fun getItem(position: Int): Any {
-        return images[position]
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        val imageUri = Uri.parse(imageList[position])
+        Glide.with(holder.itemView)
+            .load(imageUri)
+            .centerCrop()
+            .into(holder.imageView)
     }
 
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
+    override fun getItemCount(): Int {
+        return imageList.size
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val imageView: ImageView
-
-        if (convertView == null) {
-            // Create a new ImageView if convertView is null
-            imageView = ImageView(context)
-            imageView.layoutParams = AbsListView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
-        } else {
-            // Reuse convertView if not null
-            imageView = convertView as ImageView
-        }
-
-        // Load the image into the ImageView using Glide
-        Glide.with(context)
-            .load(images[position])
-            .into(imageView)
-
-        return imageView
+    inner class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val imageView: ImageView = itemView.findViewById(R.id.imageView)
     }
 }
-
