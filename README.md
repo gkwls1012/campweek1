@@ -1,7 +1,10 @@
 # campweek1
 프로젝트 이름: MyApplication 
+
 팀원: 김하진, 김현서
+
 프로젝트 설명: 
+
 세 개의 탭으로 구성되어 있는 앱이다.
 1. Contacts
 
@@ -17,13 +20,10 @@
 
 
 Screenshots
-![Contacts_1](https://github.com/gkwls1012/campweek1/assets/138105180/36e1e2c2-1a17-4e55-9ad2-9ab54cb03d74)
-![Contacts_2](https://github.com/gkwls1012/campweek1/assets/138105180/f4926beb-cf97-4ae6-9840-90077001e89c)
+![Contacts_1](https://github.com/gkwls1012/campweek1/assets/138105180/36e1e2c2-1a17-4e55-9ad2-9ab54cb03d74)![Contacts_2](https://github.com/gkwls1012/campweek1/assets/138105180/f4926beb-cf97-4ae6-9840-90077001e89c)
 
-![Gallery_1](https://github.com/gkwls1012/campweek1/assets/138105180/203dda34-2dbe-4605-a0fe-177b659c78fb)
-![Gallery_2](https://github.com/gkwls1012/campweek1/assets/138105180/38d69800-058e-4f6f-9fad-d3ab2092f3f0)
+![Gallery_1](https://github.com/gkwls1012/campweek1/assets/138105180/203dda34-2dbe-4605-a0fe-177b659c78fb)![Gallery_2](https://github.com/gkwls1012/campweek1/assets/138105180/38d69800-058e-4f6f-9fad-d3ab2092f3f0)
 
-![MiniGame_1](https://github.com/gkwls1012/campweek1/assets/138105180/9913f2f7-80e7-461c-a7df-69d7c7bf4074)
-![MiniGame_2](https://github.com/gkwls1012/campweek1/assets/138105180/eef83845-da7d-41f9-8f87-e61fb47415d0)
+![MiniGame_1](https://github.com/gkwls1012/campweek1/assets/138105180/9913f2f7-80e7-461c-a7df-69d7c7bf4074)![MiniGame_2](https://github.com/gkwls1012/campweek1/assets/138105180/eef83845-da7d-41f9-8f87-e61fb47415d0)
 
 *APK file: github repository에 업로드됨.
