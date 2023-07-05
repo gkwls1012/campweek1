@@ -9,7 +9,8 @@
         android:id="@+id/navigation_home"
         android:name="com.example.myapplication.ui.Tab1.Fragment1"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_1" />
+        tools:layout="@layout/fragment_1" >
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -22,4 +23,20 @@
         android:name="com.example.myapplication.ui.Tab3.Fragment3"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_3" />
+
+    <fragment
+        android:id="@+id/addContactFragment"
+        android:name="com.example.myapplication.ui.Tab1.AddContactFragment"
+        android:label="Add Contact"
+        tools:layout="@layout/fragment_add_contact" />
+
+
+    <action
+        android:id="@+id/action_fragment1_to_addContactFragment"
+        app:destination="@id/addContactFragment" />
+
+    <action
+        android:id="@+id/addContactFragment_to_action_fragment1"
+        app:destination="@+id/navigation_home" />
+
 </navigation>
