@@ -2,6 +2,7 @@ package com.example.myapplication.ui.Tab2
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ class Fragment2 : Fragment() {
     private val imageList = mutableListOf<String>()
     private val selectedImages = mutableSetOf<String>()
     private val SELECT_IMAGES_REQUEST_CODE = 1
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,6 +27,8 @@ class Fragment2 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.fragment_2, container, false)
+
+        sharedPreferences = requireActivity().getSharedPreferences("MyAppPreferences", Activity.MODE_PRIVATE)
 
         recyclerView = root.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
@@ -35,16 +39,19 @@ class Fragment2 : Fragment() {
         selectImageButton.setOnClickListener { selectImages() }
 
         // Load previously saved image URIs from shared preferences
-        val sharedPreferences = requireActivity().getSharedPreferences("MyAppPreferences", Activity.MODE_PRIVATE)
         val savedImageList = sharedPreferences.getStringSet("imageList", emptySet())
         imageList.addAll(savedImageList ?: emptySet())
         imageAdapter.notifyDataSetChanged()
-
 
         val deletePhotoButton: Button = root.findViewById(R.id.btnDeletePhoto)
         deletePhotoButton.setOnClickListener {
             imageAdapter.deleteSelectedImages()
             selectedImages.clear()
+
+            // Update the saved image list in shared preferences
+            val editor = sharedPreferences.edit()
+            editor.putStringSet("imageList", imageList.toSet())
+            editor.apply()
         }
 
         return root
@@ -67,15 +74,16 @@ class Fragment2 : Fragment() {
                 for (i in 0 until clipData.itemCount) {
                     val imageUri = clipData.getItemAt(i).uri
                     imageList.add(imageUri.toString())
-                    val sharedPreferences = requireActivity().getSharedPreferences("MyAppPreferences", Activity.MODE_PRIVATE)
-                    val editor = sharedPreferences.edit()
-                    editor.putStringSet("imageList", imageList.toSet())
-                    editor.apply()
                 }
             } else {
                 val imageUri = data?.data
                 imageList.add(imageUri.toString())
             }
+
+            // Update the saved image list in shared preferences
+            val editor = sharedPreferences.edit()
+            editor.putStringSet("imageList", imageList.toSet())
+            editor.apply()
 
             imageAdapter.notifyDataSetChanged()
         }

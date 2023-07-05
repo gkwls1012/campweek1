@@ -1,6 +1,8 @@
 package com.example.myapplication.ui.Tab3
 
+import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
@@ -8,6 +10,8 @@ import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,10 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.R
 import com.example.myapplication.databinding.Fragment3Binding
-import com.example.myapplication.ui.Tab3.Tab3ViewModel
 import kotlin.random.Random
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 
 class Fragment3 : Fragment() {
 
@@ -28,18 +29,15 @@ class Fragment3 : Fragment() {
     private lateinit var restartButton: Button
     private lateinit var vibrator: Vibrator
     private var clickCount = 0
+    private var imageResourceCount = mutableMapOf<Int, Int>()
+    private lateinit var boingAnimation: Animation
+    private lateinit var sharedPreferences: SharedPreferences
 
     private var _binding: Fragment3Binding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-    private lateinit var boingAnimation: Animation
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Load the "boing" animation from the XML file
         boingAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.boing_animation)
     }
 
@@ -50,9 +48,10 @@ class Fragment3 : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val tab3ViewModel = ViewModelProvider(this).get(Tab3ViewModel::class.java)
-
         _binding = Fragment3Binding.inflate(inflater, container, false)
         val root: View = binding.root
+
+        sharedPreferences = requireActivity().getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
 
         val textView: TextView = binding.textNotifications
         tab3ViewModel.text.observe(viewLifecycleOwner) {
@@ -67,9 +66,15 @@ class Fragment3 : Fragment() {
         shapeImageView.setOnClickListener { onShapeClick() }
         restartButton.setOnClickListener { onRestartClick() }
 
+        // Retrieve the saved image resource counts from shared preferences
+        val imageResourceCountString = sharedPreferences.getString("imageResourceCount", "")
+        if (imageResourceCountString?.isNotEmpty() == true) {
+            imageResourceCount = deserializeImageResourceCount(imageResourceCountString)
+            updateCounterTextView()
+        }
+
         return root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -81,24 +86,35 @@ class Fragment3 : Fragment() {
         clickCount++
         tapCountTextView.text = clickCount.toString()
 
-        val dino = Random.nextInt(1, 5) // Generates a random number between 1 and 5 (inclusive)
-
-        // Set the corresponding image based on the random number
-        val imageResource = when (dino) {
-            1 -> R.drawable.green
-            2 -> R.drawable.star
-            3 -> R.drawable.yellow
-            4 -> R.drawable.red
-            else -> R.drawable.star
-        }
-
         val random = Random.nextInt(10, 51)
         if (clickCount >= random) {
+            val dino = Random.nextInt(1, 5)
+            val imageResource = when (dino) {
+                1 -> {
+                    increaseImageResourceCount(R.drawable.green)
+                    R.drawable.green
+                }
+                2 -> {
+                    increaseImageResourceCount(R.drawable.star)
+                    R.drawable.star
+                }
+                3 -> {
+                    increaseImageResourceCount(R.drawable.yellow)
+                    R.drawable.yellow
+                }
+                4 -> {
+                    increaseImageResourceCount(R.drawable.red)
+                    R.drawable.red
+                }
+                else -> {
+                    increaseImageResourceCount(R.drawable.star)
+                    R.drawable.star
+                }
+            }
             shapeImageView.setImageResource(imageResource)
             shapeImageView.startAnimation(boingAnimation)
             restartButton.visibility = View.VISIBLE
             shapeImageView.isEnabled = false
-
         }
 
         vibrateDevice()
@@ -118,4 +134,58 @@ class Fragment3 : Fragment() {
         shapeImageView.isEnabled = true
     }
 
+    private fun increaseImageResourceCount(resourceId: Int) {
+        val count = imageResourceCount.getOrDefault(resourceId, 0)
+        imageResourceCount[resourceId] = count + 1
+        updateCounterTextView()
+
+        // Save the image resource counts to shared preferences
+        val editor = sharedPreferences.edit()
+        editor.putString("imageResourceCount", serializeImageResourceCount(imageResourceCount))
+        editor.apply()
+    }
+
+    private fun updateCounterTextView() {
+        val counterTextView = binding.counterTextView
+        val countText = StringBuilder()
+
+        for ((resourceId, count) in imageResourceCount) {
+            val name = when (resourceId) {
+                R.drawable.yellow -> "Yellow dino"
+                R.drawable.green -> "Green dino"
+                R.drawable.star -> "Blue dino"
+                R.drawable.red -> "Red dino"
+                else -> ""
+            }
+            countText.append(name)
+                .append(": ")
+                .append(count)
+                .append("\n")
+        }
+        counterTextView.text = countText.toString()
+    }
+
+    private fun serializeImageResourceCount(countMap: Map<Int, Int>): String {
+        val countString = StringBuilder()
+        for ((key, value) in countMap) {
+            countString.append(key).append(":").append(value).append(",")
+        }
+        return countString.toString()
+    }
+
+    private fun deserializeImageResourceCount(countString: String): MutableMap<Int, Int> {
+        val countMap = mutableMapOf<Int, Int>()
+        val pairs = countString.split(",")
+        for (pair in pairs) {
+            val keyValue = pair.split(":")
+            if (keyValue.size == 2) {
+                val resourceId = keyValue[0].toIntOrNull()
+                val count = keyValue[1].toIntOrNull()
+                if (resourceId != null && count != null) {
+                    countMap[resourceId] = count
+                }
+            }
+        }
+        return countMap
+    }
 }

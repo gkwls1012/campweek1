@@ -10,7 +10,6 @@
         android:id="@+id/text_notifications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:textAlignment="center"
         android:textSize="30sp"
         android:textStyle="bold|italic"
@@ -48,11 +47,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Restart"
+        android:layout_below="@id/shapeImageView"
         android:visibility="gone"
         android:onClick="onRestartClick"
-        android:layout_below="@id/shapeImageView"
+        android:layout_marginTop="0dp"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/counterTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="500dp"
+        android:background="#EEEEEE"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textColor="#333333"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>
