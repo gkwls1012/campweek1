@@ -29,4 +29,4 @@ Screenshots
 
 ![MiniGame_1](https://github.com/gkwls1012/campweek1/assets/138105180/9913f2f7-80e7-461c-a7df-69d7c7bf4074)![MiniGame_2](https://github.com/gkwls1012/campweek1/assets/138105180/eef83845-da7d-41f9-8f87-e61fb47415d0)
 
-*APK file: github repository에 업로드됨.
+*APK file: github repository에 업로드됨. (app-debug.apk)
