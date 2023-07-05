@@ -71,9 +71,20 @@ class Fragment3 : Fragment() {
         clickCount++
         tapCountTextView.text = clickCount.toString()
 
+        val dino = Random.nextInt(1, 5) // Generates a random number between 1 and 5 (inclusive)
+
+        // Set the corresponding image based on the random number
+        val imageResource = when (dino) {
+            1 -> R.drawable.green
+            2 -> R.drawable.star
+            3 -> R.drawable.yellow
+            4 -> R.drawable.red
+            else -> R.drawable.star
+        }
+
         val random = Random.nextInt(10, 51)
         if (clickCount >= random) {
-            shapeImageView.setImageResource(R.drawable.star)
+            shapeImageView.setImageResource(imageResource)
             restartButton.visibility = View.VISIBLE
             shapeImageView.isEnabled = false
 

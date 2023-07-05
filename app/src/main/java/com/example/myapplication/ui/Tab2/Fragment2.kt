@@ -16,6 +16,7 @@ class Fragment2 : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var imageAdapter: ImageAdapter
     private val imageList = mutableListOf<String>()
+    private val selectedImages = mutableSetOf<String>()
     private val SELECT_IMAGES_REQUEST_CODE = 1
 
     override fun onCreateView(
@@ -33,11 +34,16 @@ class Fragment2 : Fragment() {
         val selectImageButton: Button = root.findViewById(R.id.btnAddImages)
         selectImageButton.setOnClickListener { selectImages() }
 
+        val deletePhotoButton: Button = root.findViewById(R.id.btnDeletePhoto)
+        deletePhotoButton.setOnClickListener {
+            imageAdapter.deleteSelectedImages()
+            selectedImages.clear()
+        }
+
         return root
     }
 
-
-    fun selectImages() {
+    private fun selectImages() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
