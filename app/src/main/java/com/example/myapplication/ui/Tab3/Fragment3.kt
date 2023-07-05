@@ -18,6 +18,8 @@ import com.example.myapplication.R
 import com.example.myapplication.databinding.Fragment3Binding
 import com.example.myapplication.ui.Tab3.Tab3ViewModel
 import kotlin.random.Random
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 
 class Fragment3 : Fragment() {
 
@@ -32,6 +34,14 @@ class Fragment3 : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private lateinit var boingAnimation: Animation
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Load the "boing" animation from the XML file
+        boingAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.boing_animation)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -85,6 +95,7 @@ class Fragment3 : Fragment() {
         val random = Random.nextInt(10, 51)
         if (clickCount >= random) {
             shapeImageView.setImageResource(imageResource)
+            shapeImageView.startAnimation(boingAnimation)
             restartButton.visibility = View.VISIBLE
             shapeImageView.isEnabled = false
 
