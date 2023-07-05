@@ -12,9 +12,14 @@
 
 1. Contacts
    - 휴대폰의 연락처 데이터를 활용하여 연락처를 볼 수 있다.
-   - Add Contact: 연락처를 추가할 수 있는 화면으로 넘어간다.
-   - Done: 이름과 전화번호를 입력했을 경우 연락처를 추가한다. 핸드폰 연락처 앱과 RecyclerView에 동시에 추가된다.
-
+   - READ_CONTACTS로 권한을 받아와 핸드폰 주소록에 저장된 연락처를 불러온 뒤, RecyclerView로 화면에 나타낸다.
+   - Add Contact
+        *  AddContactFragment로 이동한다.
+        *  해당 화면에서 연락처를 직접 추가할 수 있다. EditText를 활용해 사용자에게 이름과 전화번호를 입력받는다.
+   - Done
+        *  이름과 전화번호를 입력했을 경우 연락처를 추가한다. 이름과 전화번호 중 하나라도 누락된 경우, "Please enter name and phone number" 문구가 화면에 출력된다.
+        *  WRITE_CONTACTS로 권한을 받아 RecyclerView뿐만 아닌 핸드폰 연락처 앱에도 연락처가 추가된다.
+   - 휴대폰 연락처 데이터와 연동시켜, 앱을 종료한 후 들어와도 연락처들이 남아있도록 했다.
 
 <img src="https://github.com/gkwls1012/campweek1/assets/138105180/203dda34-2dbe-4605-a0fe-177b659c78fb.png" width="200" height="400"/> 
 <img src="https://github.com/gkwls1012/campweek1/assets/138105180/38d69800-058e-4f6f-9fad-d3ab2092f3f0.png" width="200" height="400"/>
