@@ -34,6 +34,13 @@ class Fragment2 : Fragment() {
         val selectImageButton: Button = root.findViewById(R.id.btnAddImages)
         selectImageButton.setOnClickListener { selectImages() }
 
+        // Load previously saved image URIs from shared preferences
+        val sharedPreferences = requireActivity().getSharedPreferences("MyAppPreferences", Activity.MODE_PRIVATE)
+        val savedImageList = sharedPreferences.getStringSet("imageList", emptySet())
+        imageList.addAll(savedImageList ?: emptySet())
+        imageAdapter.notifyDataSetChanged()
+
+
         val deletePhotoButton: Button = root.findViewById(R.id.btnDeletePhoto)
         deletePhotoButton.setOnClickListener {
             imageAdapter.deleteSelectedImages()
@@ -60,6 +67,10 @@ class Fragment2 : Fragment() {
                 for (i in 0 until clipData.itemCount) {
                     val imageUri = clipData.getItemAt(i).uri
                     imageList.add(imageUri.toString())
+                    val sharedPreferences = requireActivity().getSharedPreferences("MyAppPreferences", Activity.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putStringSet("imageList", imageList.toSet())
+                    editor.apply()
                 }
             } else {
                 val imageUri = data?.data
