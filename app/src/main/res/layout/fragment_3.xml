@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textSize="30sp"
+        android:textSize="25sp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_below="@id/text_notifications"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:text="0"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="30dp" />
@@ -39,7 +39,6 @@
         android:onClick="onShapeClick"
         android:layout_below="@id/tapCountTextView"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
         android:background="@color/white"/>
 
     <Button
@@ -47,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Restart"
-        android:layout_below="@id/shapeImageView"
+        android:layout_below="@+id/shapeImageView"
         android:visibility="gone"
         android:onClick="onRestartClick"
         android:layout_marginTop="0dp"
@@ -55,16 +54,16 @@
 
     <TextView
         android:id="@+id/counterTextView"
+        android:layout_marginTop="400dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="500dp"
         android:background="#EEEEEE"
         android:gravity="center"
         android:padding="16dp"
         android:textColor="#333333"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
 
